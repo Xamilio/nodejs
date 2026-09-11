@@ -1,0 +1,16 @@
+GET http://localhost:4200/
+
+###
+
+
+GET http://localhost:4200/about
+
+###
+
+POST http://localhost:4200
+Content-Type: application/json
+
+{
+    "name" : "Artem",
+    "age" : 20
+}

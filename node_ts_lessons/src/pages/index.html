@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Городская Библиотека «Читальня» — Главная</title>
+  <meta name="description" content="Городской читальный зал и онлайн-каталог книг с удобным бронированием, коворкингом и мероприятиями.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+
+  <!-- Навигация -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo" id="main-logo">
+        <span class="logo-icon">📚</span> Читальня <span>/ Библиотека</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="/" class="active">Главная</a></li>
+          <li><a href="/about">О нас</a></li>
+          <li><a href="/books">Каталог (TS)</a></li>
+          <li><a href="#gallery">Галерея</a></li>
+          <li><a href="#contacts">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero секция -->
+  <main>
+    <section class="hero">
+      <span class="hero-badge">Городской читальный зал & онлайн-каталог</span>
+      <h1>Пространство для чтения,<br>идей и вдохновения</h1>
+      <p>Более 40 000 книг, атмосферные рабочие места с бесплатным Wi-Fi, свежим кофе и регулярными литературными лекциями.</p>
+      
+      <div class="search-box">
+        <input type="text" id="book-search-input" placeholder="Поиск книги по названию или автору..." autocomplete="off">
+        <button type="button" id="search-btn">
+          <span>🔍</span> Найти
+        </button>
+      </div>
+    </section>
+
+    <!-- Секция изображений разных форматов -->
+    <section id="gallery" class="container image-gallery-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Галерея малюнків сервера</h2>
+          <p class="section-subtitle">Малюнки різних форматів (SVG, PNG, JPG, WEBP), збережені в папці <code>src/images</code> та віддані сервером Node.js</p>
+        </div>
+      </div>
+
+      <div class="image-grid">
+        <!-- 1. SVG Image -->
+        <div class="image-card">
+          <div class="image-wrapper">
+            <img src="/images/banner.svg" alt="Векторний баннер бібліотеки" class="responsive-img">
+            <span class="image-badge badge-svg">.SVG Format</span>
+          </div>
+          <div class="image-info">
+            <h4>Векторний баннер</h4>
+            <p>Формат <strong>SVG</strong> (Scalable Vector Graphics) — чітка векторна графіка будь-якого масштабу.</p>
+          </div>
+        </div>
+
+        <!-- 2. PNG Image -->
+        <div class="image-card">
+          <div class="image-wrapper">
+            <img src="/images/badge.png" alt="Фірмовий бейдж Читальня" class="responsive-img">
+            <span class="image-badge badge-png">.PNG Format</span>
+          </div>
+          <div class="image-info">
+            <h4>Фірмовий бейдж</h4>
+            <p>Формат <strong>PNG</strong> (Portable Network Graphics) — підтримує прозорість та високу якість.</p>
+          </div>
+        </div>
+
+        <!-- 3. JPG Image -->
+        <div class="image-card">
+          <div class="image-wrapper">
+            <img src="/images/reading-hall.jpg" alt="Читальний зал бібліотеки" class="responsive-img">
+            <span class="image-badge badge-jpg">.JPG Format</span>
+          </div>
+          <div class="image-info">
+            <h4>Читальний зал</h4>
+            <p>Формат <strong>JPG</strong> (Joint Photographic Experts Group) — оптимальне стиснення для фотографій.</p>
+          </div>
+        </div>
+
+        <!-- 4. WEBP Image -->
+        <div class="image-card">
+          <div class="image-wrapper">
+            <img src="/images/cozy-lounge.webp" alt="Лаунж-зона читального залу" class="responsive-img">
+            <span class="image-badge badge-webp">.WEBP Format</span>
+          </div>
+          <div class="image-info">
+            <h4>Затишний лаунж</h4>
+            <p>Формат <strong>WEBP</strong> — сучасний високоефективний формат веб-зображень від Google.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Популярные книги -->
+    <section id="catalog" class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Популярные издания</h2>
+          <p class="section-subtitle">Книги, которые читатели берут чаще всего на этой неделе</p>
+        </div>
+
+        <div class="filter-tabs" id="category-filters">
+          <button class="filter-btn active" data-category="all">Все</button>
+          <button class="filter-btn" data-category="Классика">Классика</button>
+          <button class="filter-btn" data-category="Фантастика">Фантастика</button>
+          <button class="filter-btn" data-category="Нон-фикшн">Нон-фикшн</button>
+          <button class="filter-btn" data-category="Детектив">Детектив</button>
+        </div>
+      </div>
+
+      <div class="book-grid" id="book-cards-grid">
+        <div class="book-card" data-category="Классика" data-title="Мастер и Маргарита" data-author="Михаил Булгаков">
+          <div class="book-cover">📖</div>
+          <span class="book-tag">Классика</span>
+          <h3 class="book-title">Мастер и Маргарита</h3>
+          <p class="book-author">Михаил Булгаков</p>
+          <div class="book-status">
+            <span class="status-badge">● В наличии (3 шт.)</span>
+            <button class="btn-reserve" onclick="openReserveModal('Мастер и Маргарита', 'Михаил Булгаков')">Взять</button>
+          </div>
+        </div>
+
+        <div class="book-card" data-category="Фантастика" data-title="Дюна" data-author="Фрэнк Герберт">
+          <div class="book-cover">🌌</div>
+          <span class="book-tag">Фантастика</span>
+          <h3 class="book-title">Дюна</h3>
+          <p class="book-author">Фрэнк Герберт</p>
+          <div class="book-status">
+            <span class="status-badge">● В наличии (1 шт.)</span>
+            <button class="btn-reserve" onclick="openReserveModal('Дюна', 'Фрэнк Герберт')">Взять</button>
+          </div>
+        </div>
+
+        <div class="book-card" data-category="Нон-фикшн" data-title="Думай медленно... решай быстро" data-author="Даниэль Канеман">
+          <div class="book-cover">🧠</div>
+          <span class="book-tag">Нон-фикшн</span>
+          <h3 class="book-title">Думай медленно...</h3>
+          <p class="book-author">Даниэль Канеман</p>
+          <div class="book-status">
+            <span class="status-badge">● В наличии (2 шт.)</span>
+            <button class="btn-reserve" onclick="openReserveModal('Думай медленно...', 'Даниэль Канеман')">Взять</button>
+          </div>
+        </div>
+
+        <div class="book-card" data-category="Детектив" data-title="Убийство в Восточном экспрессе" data-author="Агата Кристи">
+          <div class="book-cover">🔍</div>
+          <span class="book-tag">Детектив</span>
+          <h3 class="book-title">Убийство в экспрессе</h3>
+          <p class="book-author">Агата Кристи</p>
+          <div class="book-status">
+            <span class="status-badge">● В наличии (4 шт.)</span>
+            <button class="btn-reserve" onclick="openReserveModal('Убийство в экспрессе', 'Агата Кристи')">Взять</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Контактная и справочная информация -->
+      <div id="contacts" class="info-card">
+        <div class="info-item">
+          <h4>📍 Где мы находимся</h4>
+          <p>ул. Книжная, д. 15<br>м. Театральная (2 мин от метро)</p>
+        </div>
+        <div class="info-item">
+          <h4>⏰ Режим работы</h4>
+          <p>Пн — Пт: с 10:00 до 21:00<br>Сб — Вс: с 11:00 до 19:00</p>
+        </div>
+        <div class="info-item">
+          <h4>📞 Связаться с нами</h4>
+          <p>+7 (495) 123-45-67<br>library@cityread.ru</p>
+        </div>
+        <div class="info-item">
+          <h4>🎫 Читательский билет</h4>
+          <p>Оформление за 3 минуты по паспорту прямо у стойки администратора</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Модальное окно бронирования -->
+  <div class="modal-overlay" id="reserve-modal">
+    <div class="modal">
+      <h3 id="modal-book-title">Бронирование книги</h3>
+      <p id="modal-book-author">Выберите дату получения в читальном зале.</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal()">Отмена</button>
+        <button class="btn-reserve" style="background: var(--emerald-primary); color: #000;" onclick="confirmReservation()">Подтвердить бронь</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Уведомление -->
+  <div class="toast" id="toast-notify">Бронь успешно оформлена! Ждем вас в библиотеке.</div>
+
+  <!-- Подвал -->
+  <footer>
+    <p>© 2026 Городская Библиотека «Читальня». Все права защищены. Атмосферное пространство литературы и открытий.</p>
+  </footer>
+
+  <script>
+    // Живой поиск и фильтрация
+    const searchInput = document.getElementById('book-search-input');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const bookCards = document.querySelectorAll('.book-card');
+
+    let currentCategory = 'all';
+
+    function filterBooks() {
+      const query = searchInput.value.toLowerCase().trim();
+
+      bookCards.forEach(card => {
+        const title = card.getAttribute('data-title').toLowerCase();
+        const author = card.getAttribute('data-author').toLowerCase();
+        const category = card.getAttribute('data-category');
+
+        const matchesQuery = title.includes(query) || author.includes(query);
+        const matchesCategory = currentCategory === 'all' || category === currentCategory;
+
+        if (matchesQuery && matchesCategory) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', filterBooks);
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.getAttribute('data-category');
+        filterBooks();
+      });
+    });
+
+    // Модальное окно
+    const modal = document.getElementById('reserve-modal');
+    const modalTitle = document.getElementById('modal-book-title');
+    const modalAuthor = document.getElementById('modal-book-author');
+    const toast = document.getElementById('toast-notify');
+
+    function openReserveModal(title, author) {
+      modalTitle.textContent = `Забронировать «${title}»`;
+      modalAuthor.textContent = `Автор: ${author}. Книга будет зарезервирована за вами на 3 дня.`;
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    function confirmReservation() {
+      closeModal();
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
