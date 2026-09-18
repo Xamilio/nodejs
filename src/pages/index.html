@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Міська бібліотека</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <h1>Міська бібліотека</h1>
+
+            <nav>
+                <a href="#home">Головна</a>
+                <a href="books">Книги</a>
+                <a href="#add-book">Додати книгу</a>
+                <a href="about">Про нас</a>
+                <a href="#contacts">Контакти</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <h2>Відкрий світ книг</h2>
+                <p>
+                    Знайдіть цікаві книги, дізнайтеся більше про нашу бібліотеку
+                    та завітайте до нас.
+                </p>
+                <a href="#books" class="button">Переглянути книги</a>
+            </div>
+        </section>
+
+        <section id="books" class="section">
+            <div class="container">
+                <h2>Популярні книги</h2>
+
+                <div class="books">
+                    <article class="book">
+                        <h3>Кобзар</h3>
+                        <p>Ціна: <strong>250 грн</strong></p>
+                        <span class="book-status active">В наявності</span>
+                    </article>
+
+                    <article class="book">
+                        <h3>Тигролови</h3>
+                        <p>Ціна: <strong>320 грн</strong></p>
+                        <span class="book-status active">В наявності</span>
+                    </article>
+
+                    <article class="book">
+                        <h3>1984</h3>
+                        <p>Ціна: <strong>400 грн</strong></p>
+                        <span class="book-status active">В наявності</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="add-book" class="section add-book-section">
+            <div class="container">
+                <h2>Додати нову книгу</h2>
+                <form id="addBookForm" class="book-form">
+                    <div class="form-group">
+                        <label for="title">Назва книги:</label>
+                        <input type="text" id="title" name="title" required placeholder="Наприклад: Кобзар">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Ціна (грн):</label>
+                        <input type="number" id="price" name="price" required min="0" step="1" placeholder="Наприклад: 250">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label for="is_active" class="checkbox-label">
+                            <input type="checkbox" id="is_active" name="is_active" checked>
+                            <span>В наявності (активна)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="button form-button">Додати книгу в масив</button>
+                    <div id="form-message" class="form-message"></div>
+                </form>
+            </div>
+        </section>
+
+        <section id="about" class="section about">
+            <div class="container">
+                <h2>Про бібліотеку</h2>
+                <p>
+                    Наша бібліотека — це затишний простір для читання,
+                    навчання та спілкування. У нашому фонді є художня,
+                    наукова та навчальна література для читачів різного віку.
+                </p>
+            </div>
+        </section>
+
+        <section id="contacts" class="section contacts">
+            <div class="container">
+                <h2>Контакти</h2>
+                <p><strong>Адреса:</strong> вул. Центральна, 10</p>
+                <p><strong>Телефон:</strong> +380 00 123 45 67</p>
+                <p><strong>Email:</strong> library@example.com</p>
+                <p><strong>Графік:</strong> Пн–Пт, 09:00–18:00</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Міська бібліотека. Усі права захищені.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function fetchBooks() {
+            try {
+                const res = await fetch('/books');
+                if (!res.ok) return;
+                const data = await res.json();
+                const booksList = data.data || data;
+                if (Array.isArray(booksList)) {
+                    renderBooks(booksList);
+                }
+            } catch (err) {
+                console.error("Помилка завантаження книг:", err);
+            }
+        }
+
+        function renderBooks(books) {
+            const container = document.querySelector('.books');
+            if (!container) return;
+            container.innerHTML = books.map(book => `
+                <article class="book">
+                    <h3>${escapeHtml(book.title)}</h3>
+                    <p>Ціна: <strong>${book.price} грн</strong></p>
+                    <span class="book-status ${book.is_active ? 'active' : 'inactive'}">
+                        ${book.is_active ? 'В наявності' : 'Немає'}
+                    </span>
+                </article>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        document.getElementById('addBookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageEl = document.getElementById('form-message');
+            messageEl.className = 'form-message';
+            messageEl.textContent = 'Надсилання...';
+
+            const title = document.getElementById('title').value.trim();
+            const price = Number(document.getElementById('price').value);
+            const is_active = document.getElementById('is_active').checked;
+
+            // Створюємо JSON об'єкт книжки
+            const bookPayload = {
+                title: title,
+                price: price,
+                is_active: is_active
+            };
+
+            try {
+                const response = await fetch('/books', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookPayload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && (result.status === 201 || result.data)) {
+                    messageEl.className = 'form-message success';
+                    messageEl.textContent = `Книгу "${title}" успішно додано в масив books!`;
+                    document.getElementById('addBookForm').reset();
+                    document.getElementById('is_active').checked = true;
+                    fetchBooks();
+                } else {
+                    messageEl.className = 'form-message error';
+                    messageEl.textContent = result.error || 'Помилка при додаванні книги';
+                }
+            } catch (err) {
+                messageEl.className = 'form-message error';
+                messageEl.textContent = 'Помилка мережі при відправці JSON';
+                console.error(err);
+            }
+        });
+
+        // Початкове завантаження книг при відкритті сторінки
+        fetchBooks();
+    </script>
+</body>
+</html>
