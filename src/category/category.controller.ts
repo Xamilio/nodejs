@@ -7,20 +7,21 @@ import {
   Post,
 } from '@nestjs/common';
 import { CategoryService } from './category.service.js';
-import type { CategoryCreateType, CategoryType } from './type/CategoryType.js';
+import { CategoryCreateReqDto } from './dtos/category_create.req.dto.js';
+import { CategoryGetResDto } from './dtos/category_get.res.dto.js';
 
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  getAllCategories(): CategoryType[] {
+  getAllCategories(): CategoryGetResDto[] {
     return this.categoryService.getCategories();
   }
 
   @Get(':id')
-  getCategoryById(@Param('id') id: string): CategoryType {
-    const category: CategoryType | undefined =
+  getCategoryById(@Param('id') id: string): CategoryGetResDto {
+    const category: CategoryGetResDto | undefined =
       this.categoryService.getCategoryById(+id);
     if (category === undefined) {
       throw new NotFoundException('Category not found');
@@ -29,11 +30,11 @@ export class CategoryController {
   }
 
   @Post()
-  createCategory(@Body() category: CategoryCreateType): CategoryType {
+  createCategory(@Body() category: CategoryCreateReqDto): CategoryGetResDto {
     return {
       id: 3,
+      slug: category.slug,
       title: category.title,
-      image: category.image,
       parent_id: null,
     };
   }
