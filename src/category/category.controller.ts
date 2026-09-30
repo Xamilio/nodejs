@@ -14,28 +14,36 @@ import { CategoryGetResDto } from './dtos/category_get.res.dto.js';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get()
-  getAllCategories(): CategoryGetResDto[] {
-    return this.categoryService.getCategories();
-  }
+  // @Get()
+  // getAllCategories(): CategoryGetResDto[] {
+  //   return this.categoryService.getCategories();
+  // }
 
-  @Get(':id')
-  getCategoryById(@Param('id') id: string): CategoryGetResDto {
-    const category: CategoryGetResDto | undefined =
-      this.categoryService.getCategoryById(+id);
-    if (category === undefined) {
-      throw new NotFoundException('Category not found');
-    }
-    return category;
-  }
+  // @Get(':id')
+  // getCategoryById(@Param('id') id: string): CategoryGetResDto {
+  //   const category: CategoryGetResDto | undefined =
+  //     this.categoryService.getCategoryById(+id);
+  //   if (category === undefined) {
+  //     throw new NotFoundException('Category not found');
+  //   }
+  //   return category;
+  // }
 
   @Post()
-  createCategory(@Body() category: CategoryCreateReqDto): CategoryGetResDto {
-    return {
-      id: 3,
-      slug: category.slug,
-      title: category.title,
-      parent_id: null,
-    };
+  async createCategory(
+    @Body() category: CategoryCreateReqDto,
+  ): Promise<CategoryGetResDto> {
+    const created = await this.categoryService.create(category);
+    return created;
   }
+
+  @Get()
+  async getAllCategory(): Promise<CategoryGetResDto[]> {
+    return await this.categoryService.findAll();
+  }
+
+  // @Get(':id')
+  // async getCategoryById(@Param('id') id: number): Promise<CategoryGetResDto> {
+  //   const category = await this.categoryService.findById();
+  // }
 }

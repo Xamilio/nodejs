@@ -1,56 +1,62 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from './category.entity.js';
+import { Repository } from 'typeorm';
+import { CategoryCreateReqDto } from './dtos/category_create.req.dto.js';
 import { CategoryGetResDto } from './dtos/category_get.res.dto.js';
 
 @Injectable()
 export class CategoryService {
-  private categories: CategoryGetResDto[] = [
-    {
-      id: 1,
-      title: 'Furniture',
-      slug: 'furniture',
-      image: 'furniture.png',
-      parent_id: null,
-    },
-    {
-      id: 2,
-      title: 'Chairs',
-      slug: 'chairs',
-      image: 'chairs.png',
-      parent_id: 1,
-    },
-  ];
+  constructor(
+    @InjectRepository(Category)
+    private readonly _repository: Repository<Category>,
+  ) {}
 
-  getCategories(): CategoryGetResDto[] {
-    return this.categories;
+  async create(dto: CategoryCreateReqDto): Promise<CategoryGetResDto> {
+    const category = this._repository.create({
+      title: dto.title,
+      slug: dto.slug,
+      image: dto.image,
+      is_show: true,
+      parent_id: dto.parent_id,
+      description: dto.description,
+    });
+    const result = await this._repository.save(category);
+    return {
+      id: result.id,
+      title: result.title,
+      slug: result.slug,
+      image: result.image ?? '',
+      parent_id: result.parent_id,
+    };
   }
 
-  getCategoryById(id: number): CategoryGetResDto | undefined {
-    return this.categories.find((c) => c.id === id);
+  async findAll(): Promise<CategoryGetResDto[]> {
+    const categories = await this._repository.find();
+    const result: CategoryGetResDto[] = [];
+    categories.forEach((c: Category) => {
+      result.push({
+        id: c.id,
+        title: c.title,
+        slug: c.slug,
+        image: c.image ?? '',
+        parent_id: c.parent_id,
+      });
+    });
+    return result;
+  }
+
+  async findById(id: number): Promise<CategoryGetResDto | undefined> {
+    const category = await this._repository.findOneBy({ id });
+    if (category) {
+      const result: CategoryGetResDto = {
+        id: category.id,
+        title: category.title,
+        slug: category.slug,
+        image: category.image ?? '',
+        parent_id: category.parent_id,
+      };
+      return result;
+    }
   }
 }
-
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-
-// import { Category } from './category.entity';
-// import { CreateCategoryDto } from './dto/create-category.dto';
-
-// @Injectable()
-// export class CategoryService {
-
-//   constructor(
-//     @InjectRepository(Category)
-//     private readonly categoryRepository: Repository<Category>,
-//   ) {}
-
-//   async create(
-//     createCategoryDto: CreateCategoryDto,
-//   ): Promise<Category> {
-
-//     const category = this.categoryRepository.create(
-//       createCategoryDto,
-//     );
-
-//     return this.categoryRepository.save(category);
-//   }
-// }

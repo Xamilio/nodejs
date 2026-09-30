@@ -33,6 +33,10 @@ export class CategoryCreateReqDto {
   @IsString({ message: 'Image path must be string!' })
   image?: string;
 
+  @IsOptional()
+  @IsString({ message: 'Image path must be string!' })
+  description?: string;
+
   @ValidateIf((_, value) => value !== null)
   @IsInt({ message: 'Parent ID must be an integer!' })
   @Min(1, { message: 'Parent ID must be greater than 0!' })
