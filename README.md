@@ -57,6 +57,41 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Seed roles
+
+With the database connection configured in `.env`, run:
+
+```bash
+npm run seed:roles
+```
+
+The seeder inserts the `admin` and `user` roles and is safe to run more than once.
+
+## POST request permissions
+
+Protected `POST` endpoints require a valid Bearer token for a user whose role in
+the database is `admin`. The role is checked against the database for each
+request, so role changes take effect without issuing a new token. The public
+`POST /auth/login` and `POST /auth/register` endpoints are exempt so users can
+sign in and register. `POST /user` is protected and can only be used by an
+administrator.
+
+## Creating categories with an image
+
+Send `POST /category` as `multipart/form-data`. The `image` field accepts one
+JPEG, PNG, GIF, or WebP image up to 5 MB. The server stores the image under
+`uploads/categories`, saves its `/uploads/categories/...` path in the category,
+and serves it at that URL.
+
+```bash
+curl -X POST http://localhost:3000/category \
+  -H "Authorization: Bearer <admin-token>" \
+  -F "title=Fruits" \
+  -F "slug=fruits" \
+  -F "parent_id=null" \
+  -F "image=@C:/path/to/fruits.jpg"
+```
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

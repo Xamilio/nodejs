@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import type { Relation } from 'typeorm';
+import { Role } from '../../role/entities/role.entity.js';
 
 @Entity()
 export class User {
@@ -16,4 +24,8 @@ export class User {
 
   @Column({ default: false })
   is_block: boolean;
+
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: 'role_id' })
+  role: Relation<Role>;
 }

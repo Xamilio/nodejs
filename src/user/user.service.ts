@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserReqDto } from './dto/create-user.req.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { HashHelper } from '../helpers/hash.helper.js';
@@ -20,17 +20,48 @@ export class UserService {
         email: createUserDto.email,
       },
     });
-    if (user == null) {
-      const hash = await this._hashHelper.hash(createUserDto.password);
-      const result = await this._repository.create({
-        fullname: createUserDto.fullname,
-        email: createUserDto.email,
-        is_block: createUserDto.is_block,
-        password_hash: hash,
-      });
-      console.log(await this._repository.save(result));
+    if (user != null) {
+      throw new ConflictException('Користувач з таким email вже існує');
     }
-    return 'This action adds a new user';
+
+    const hash = await this._hashHelper.hash(createUserDto.password);
+    const result = this._repository.create({
+      fullname: createUserDto.fullname,
+      email: createUserDto.email,
+      is_block: createUserDto.is_block,
+      password_hash: hash,
+      role: { id: 2 },
+    });
+    const savedUser = await this._repository.save(result);
+
+    return {
+      id: savedUser.id,
+      email: savedUser.email,
+      fullname: savedUser.fullname,
+      is_block: savedUser.is_block,
+    };
+  }
+
+  async validateCredentials(email: string, password: string) {
+    const user = await this._repository.findOne({ where: { email } });
+    if (!user || user.is_block) {
+      return null;
+    }
+
+    const isValid = await this._hashHelper.isValidPassword(
+      password,
+      user.password_hash,
+    );
+    return isValid ? { id: user.id, email: user.email } : null;
+  }
+
+  async hasRole(userId: number, roleName: string): Promise<boolean> {
+    const user = await this._repository.findOne({
+      where: { id: userId },
+      relations: { role: true },
+    });
+
+    return user?.role?.name === roleName;
   }
 
   findAll() {

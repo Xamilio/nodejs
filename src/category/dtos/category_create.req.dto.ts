@@ -10,6 +10,7 @@ import {
   Matches,
   ValidateIf,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CategoryCreateReqDto {
   //@Length(5, 20, { message: 'Min: 5, Max: 20' })
@@ -38,6 +39,9 @@ export class CategoryCreateReqDto {
   description?: string;
 
   @ValidateIf((_, value) => value !== null)
+  @Transform(({ value }) =>
+    value === null || value === '' || value === 'null' ? null : Number(value),
+  )
   @IsInt({ message: 'Parent ID must be an integer!' })
   @Min(1, { message: 'Parent ID must be greater than 0!' })
   parent_id: number | null;

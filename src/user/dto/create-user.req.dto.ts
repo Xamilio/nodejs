@@ -1,4 +1,10 @@
-import { IsBoolean, IsEmail, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserReqDto {
   @IsEmail(
@@ -14,9 +20,10 @@ export class CreateUserReqDto {
   password: string;
 
   @IsString()
-  @MinLength(2, { message: 'Пароль мінімум 5 символів' })
+  @MinLength(2, { message: 'Ім’я мінімум 2 символи' })
   fullname: string;
 
+  @IsOptional()
   @IsBoolean()
   is_block?: boolean;
 }
